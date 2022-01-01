@@ -1,32 +1,43 @@
 import 'dart:math';
 
 class Game {
-  static const maxRandom = 100;
+  var maxRandom = 100;
   int? answer;
+  static List<int> myList = [];
   int c = 0;
   var r = Random();
-  Game(){
+  Game({int maxRandom = 100}){
 
     answer = r.nextInt(maxRandom)+1;
   }
-  setNumber(){
+  void setNumber(){
+
     c=0;
     answer = r.nextInt(maxRandom)+1;
   }
   int doGuess(int num){
+    c++;
     if(num > answer!){
-      c++;
+
       return 1;
     }else if(num < answer!){
-      c++;
+
       return -1;
     }else{
-      c++;
+
       return 0;
     }
   }
+  int getLen(){
+      var len = myList.length;
+      return len;
+  }
+  void addList(){
+    myList.add(c);
 
+  }
   int countNum(){
+
     return c;
   }
 }
