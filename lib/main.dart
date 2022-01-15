@@ -82,13 +82,13 @@ class HomePage extends StatelessWidget {
                         filled: true,
                         fillColor: Colors.white.withOpacity(0.7),
                         border: OutlineInputBorder(),
-                        hintText: 'Guess number 1-100',
+                        hintText: 'ทายเลขตั้งแต่ 1-100',
                       ),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(10.0),
-                    child: TextButton(
+                    child: ElevatedButton(
                       child: Text('GUESS'),
                       style: TextButton.styleFrom(
                           primary: Colors.white, backgroundColor: Colors.amber),
@@ -102,7 +102,7 @@ class HomePage extends StatelessWidget {
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   title: Text('Error'),
-                                  content: Text('Incorrect input, Try again'),
+                                  content: Text('กรอกข้อมูลไม่ถูกต้อง ให้กรอกเฉพาะตัวเลขเท่านั้น'),
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () {
@@ -122,7 +122,7 @@ class HomePage extends StatelessWidget {
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   title: Text('Result'),
-                                  content: Text('$guess is TOO HIGH! ▲'),
+                                  content: Text('$guess มากเกินไป กรุณาลองใหม่'),
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () {
@@ -140,7 +140,7 @@ class HomePage extends StatelessWidget {
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   title: Text('Result'),
-                                  content: Text('$guess is TOO LOW! ▼'),
+                                  content: Text('$guess น้อยเกินไป กรุณาลองใหม่'),
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () {
@@ -159,7 +159,7 @@ class HomePage extends StatelessWidget {
                                 return AlertDialog(
                                   title: Text('Result'),
                                   content: Text(
-                                      '$guess is CORRECT ❤, total guesses : ${game.countNum()} time '),
+                                      '$guess ถูกต้อง ❤ คุณทายไปทั้งหมด : ${game.countNum()} ครั้ง '),
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () {
