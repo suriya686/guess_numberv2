@@ -159,7 +159,7 @@ class HomePage extends StatelessWidget {
                                 return AlertDialog(
                                   title: Text('Result'),
                                   content: Text(
-                                      '$guess is CORRECT ❤, total guesses : ${game.countNum()} time'),
+                                      '$guess is CORRECT ❤, total guesses : ${game.countNum()} time '),
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () {
