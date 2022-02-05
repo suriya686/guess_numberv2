@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:guess_number/game.dart';
+import 'game.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,19 +11,27 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'GUESS THE NUMBER',
+      title: 'Guess The Number',
       theme: ThemeData(
         primarySwatch: Colors.deepOrange,
       ),
-      home: HomePage(),
+      home: LoginPage(),
     );
   }
 }
+class LoginPage extends StatefulWidget {
+  static const buttonSize = 60.0;
 
-class HomePage extends StatelessWidget {
-  HomePage({Key? key}) : super(key: key);
+  const LoginPage({Key? key}) : super(key: key);
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   var game = Game(maxRandom: 100);
-  final _controller = TextEditingController();
+  String _input = '';
+  String _input2 = "ทายเลข 1 ถึง 100";
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +42,7 @@ class HomePage extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
               color: Colors.deepOrangeAccent,
-              border: Border.all(width: 2.0, color: Colors.deepOrange),
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              //border: Border.all(width: 10.0, color: Colors.black38),
+              borderRadius: BorderRadius.circular(30),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.5),
@@ -58,125 +64,197 @@ class HomePage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Image.asset('assets/images/guess_logo.png',
-                            height: 300, width: 200),
+                            height: 220),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(" GUESS\n NUMBER",
-                                style: TextStyle(
-                                    fontSize: 40.0,
-                                    color: Colors.yellow,
-                                    fontWeight: FontWeight.bold)),
+                            Text(
+                              ' GUESS',
+                              style: TextStyle(
+                                  fontSize: 50.0,
+                                  color: Colors.amber,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              '  THE NUMBER',
+                              style: TextStyle(
+                                  fontSize: 30.0,
+                                  color: Colors.amber,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ],
                         ),
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: TextField(
-                      textAlign: TextAlign.center,
-                      controller: _controller,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white.withOpacity(0.7),
-                        border: OutlineInputBorder(),
-                        hintText: 'ทายเลขตั้งแต่ 1-100',
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(_input, style: TextStyle(fontSize: 20.0)),
                       ),
-                    ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(_input2, style: TextStyle(fontSize: 15.0)),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      for (var i = 1; i <= 3; i++) buildButton(i),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      for (var i = 4; i <= 6; i++) buildButton(i),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      for (var i = 7; i <= 9; i++) buildButton(i),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: InkWell(
+                          onTap: () {
+                            print("Delete");
+                            setState(() {
+                              _input = " ";
+                            });
+                          },
+                          borderRadius:
+                          BorderRadius.circular(LoginPage.buttonSize / 2),
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: LoginPage.buttonSize,
+                            height: LoginPage.buttonSize,
+                            child: Icon(Icons.close,size: 40,),
+                          ),
+                        ),
+                      ),
+                      buildButton(0),
+                      buildButton(-1),
+                    ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: ElevatedButton(
-                      child: Text('GUESS'),
-                      style: TextButton.styleFrom(
-                          primary: Colors.white, backgroundColor: Colors.amber),
-                      onPressed: () {
-                        var input = _controller.text;
-                        var guess = int.tryParse(input);
-                        if (guess == null) {
-                          showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text('Error'),
-                                  content: Text('กรอกข้อมูลไม่ถูกต้อง ให้กรอกเฉพาะตัวเลขเท่านั้น'),
-                                  actions: [
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Text('OK'),
-                                    )
-                                  ],
-                                );
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                          child: Text('GUESS',style: TextStyle(fontSize: 15.0,fontWeight: FontWeight.bold)),
+                          style: TextButton.styleFrom(
+                              primary: Colors.deepOrangeAccent, backgroundColor: Colors.yellow),
+                          onPressed: () {
+                            var guess = int.tryParse(_input);
+                            if (guess == null) {
+                              setState(() {
+                                _input = " ";
                               });
-                        }
-                        var result = game.doGuess(guess!);
-                        if (result == 1) {
-                          showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text('Result'),
-                                  content: Text('$guess มากเกินไป กรุณาลองใหม่'),
-                                  actions: [
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Text('OK'),
-                                    )
-                                  ],
-                                );
+                              _input2 = 'กรอกข้อมูลไม่ถูกต้อง';
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child:
+                                Text(_input2),
+                              );
+                            }
+                            var result = game.doGuess(guess!);
+                            if (result == 1) {
+                              setState(() {
+                                _input = " ";
                               });
-                        } else if (result == -1) {
-                          showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text('Result'),
-                                  content: Text('$guess น้อยเกินไป กรุณาลองใหม่'),
-                                  actions: [
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Text('OK'),
-                                    )
-                                  ],
-                                );
+                              _input2 = '$guess มากเกินไป!';
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child:
+                                Text(_input2),
+                              );
+                            } else if (result == -1) {
+                              setState(() {
+                                _input = " ";
                               });
-                        } else {
-                          showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text('Result'),
-                                  content: Text(
-                                      '$guess ถูกต้อง ❤ คุณทายไปทั้งหมด : ${game.countNum()} ครั้ง '),
-                                  actions: [
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Text('OK'),
-                                    )
-                                  ],
-                                );
+                              _input2 = '$guess น้อยเกินไป!';
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child:
+                                Text(_input2),
+                              );
+                            } else {
+                              setState(() {
+                                _input = " ";
                               });
-                        }
-                      },
+                              _input2 =
+                              '$guess ถูกต้อง! จำนวนการทาย ${game.countNum()} ครั้ง';
+                              game.setNumber();
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child:
+                                Text(_input2,),
+                              );
+                            }
+                          },
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildButton(int num) {
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: InkWell(
+        onTap: () {
+          if (num == -1) {
+            print('Backspace');
+
+            setState(() {
+              var length = _input.length;
+              _input = _input.substring(0, length - 1);
+            });
+          } else {
+            if (_input.length < 4) {
+              print('$num');
+
+              setState(() {
+                _input = '$_input$num';
+              });
+            }
+          }
+        },
+        borderRadius: BorderRadius.circular(LoginPage.buttonSize / 2),
+        child: Container(
+          decoration: (num == -1)
+              ? null
+              : BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+              border: Border.all(width: 3, color: Colors.black)
+          ),
+          alignment: Alignment.center,
+          width: LoginPage.buttonSize,
+          height: LoginPage.buttonSize,
+          child: (num == -1)
+              ? Icon(Icons.backspace,size: 40,)
+              : Text(
+            '$num',
+            style: TextStyle(fontWeight:FontWeight.bold ,color: Colors.black,fontSize: 20),
+
           ),
         ),
       ),
