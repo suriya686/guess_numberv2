@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:guess_number/nextPage.dart';
 import 'game.dart';
 
 void main() {
@@ -29,28 +30,23 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  var game = Game(maxRandom: 100);
   String _input = '';
-  String _input2 = "ทายเลข 1 ถึง 100";
+  var num1 = 0;
+  var num2 = 6;
+  String _input2 = '123456';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('GUESS THE NUMBER')),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
+      body: SizedBox.expand(
         child: Container(
           decoration: BoxDecoration(
-              color: Colors.deepOrangeAccent,
-              borderRadius: BorderRadius.circular(30),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.5),
-                  offset: Offset(2.0, 5.0),
-                  blurRadius: 5.0,
-                  spreadRadius: 2.0,
-                )
-              ]),
+            gradient: LinearGradient(
+                colors: [
+                  Colors.orange,
+                  Colors.orangeAccent,]
+
+            ),),
           child: Padding(
             padding: const EdgeInsets.all(10),
             child: Center(
@@ -63,43 +59,76 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Image.asset('assets/images/guess_logo.png',
-                            height: 220),
                         Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              ' GUESS',
-                              style: TextStyle(
-                                  fontSize: 50.0,
-                                  color: Colors.amber,
-                                  fontWeight: FontWeight.bold),
+                            Icon(
+                              Icons.lock,
+                              size: 100.0,
+                              color: Colors.yellow,
+
                             ),
+                            SizedBox(height: 20,),
                             Text(
-                              '  THE NUMBER',
+                              'LOGIN',
                               style: TextStyle(
-                                  fontSize: 30.0,
-                                  color: Colors.amber,
-                                  fontWeight: FontWeight.bold),
+                                  fontSize: 35.0, color: Colors.black,fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 10,),
+
+                            Text(
+                              'Enter PIN to login',
+                              style: TextStyle(
+                                  fontSize: 15.0, color: Colors.black),
                             ),
                           ],
                         ),
                       ],
                     ),
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(_input, style: TextStyle(fontSize: 20.0)),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(_input2, style: TextStyle(fontSize: 15.0)),
-                      ),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            for (var i = 0; i < num1; i++)
+                              Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.yellow,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  alignment: Alignment.center,
+                                  width: 40.0,
+                                  height: 40.0,
+                                ),
+                              ),
+                            for (var i = 0; i < num2 - num1; i++)
+                              Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+
+                                      shape: BoxShape.circle,
+                                      border: Border.all(width:3.0,color: Colors.black)
+                                  ),
+                                  alignment: Alignment.center,
+                                  width: 40.0,
+                                  height: 40.0,
+                                ),
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 50.0,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -128,7 +157,8 @@ class _LoginPageState extends State<LoginPage> {
                           onTap: () {
                             print("Delete");
                             setState(() {
-                              _input = " ";
+                              _input = "";
+                              num1 = 0;
                             });
                           },
                           borderRadius:
@@ -147,63 +177,13 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextButton(
-                          child: Text('GUESS',style: TextStyle(fontSize: 15.0,fontWeight: FontWeight.bold)),
-                          style: TextButton.styleFrom(
-                              primary: Colors.deepOrangeAccent, backgroundColor: Colors.yellow),
-                          onPressed: () {
-                            var guess = int.tryParse(_input);
-                            if (guess == null) {
-                              setState(() {
-                                _input = " ";
-                              });
-                              _input2 = 'กรอกข้อมูลไม่ถูกต้อง';
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child:
-                                Text(_input2),
-                              );
-                            }
-                            var result = game.doGuess(guess!);
-                            if (result == 1) {
-                              setState(() {
-                                _input = " ";
-                              });
-                              _input2 = '$guess มากเกินไป!';
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child:
-                                Text(_input2),
-                              );
-                            } else if (result == -1) {
-                              setState(() {
-                                _input = " ";
-                              });
-                              _input2 = '$guess น้อยเกินไป!';
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child:
-                                Text(_input2),
-                              );
-                            } else {
-                              setState(() {
-                                _input = " ";
-                              });
-                              _input2 =
-                              '$guess ถูกต้อง! จำนวนการทาย ${game.countNum()} ครั้ง';
-                              game.setNumber();
-                              Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child:
-                                Text(_input2,),
-                              );
-                            }
-                          },
-                        ),
-                      ],
+                    child: TextButton(
+                      child: Text('Forgot Password?'),
+                      style: TextButton.styleFrom(
+                        primary: Colors.black,
+
+                      ),
+                      onPressed: () {},
                     ),
                   ),
                 ],
@@ -226,15 +206,36 @@ class _LoginPageState extends State<LoginPage> {
             setState(() {
               var length = _input.length;
               _input = _input.substring(0, length - 1);
+              num1--;
             });
           } else {
-            if (_input.length < 4) {
-              print('$num');
-
+            if (_input.length < 6) {
+              _input = '$_input$num';
               setState(() {
-                _input = '$_input$num';
+                num1 = _input.length;
               });
             }
+          }
+          if(_input2 == _input) {Navigator.push(context, MaterialPageRoute(builder: (context) => const nextPage()),);
+          }else if(_input2 != _input && _input.length == 6){
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Incorrect PIN'),
+                    content: Text(
+                        'Please try again.'),
+                    actions: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('OK'),
+                      )
+                    ],
+                  );
+                });
           }
         },
         borderRadius: BorderRadius.circular(LoginPage.buttonSize / 2),
@@ -253,8 +254,7 @@ class _LoginPageState extends State<LoginPage> {
               ? Icon(Icons.backspace,size: 40,)
               : Text(
             '$num',
-            style: TextStyle(fontWeight:FontWeight.bold ,color: Colors.black,fontSize: 20),
-
+            style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20),
           ),
         ),
       ),
